@@ -5,7 +5,8 @@ import {
     addDoc, deleteDoc, 
     doc, onSnapshot,
     query, where,
-    orderBy, serverTimestamp } from "firebase/firestore";
+    orderBy, serverTimestamp,
+    getDoc } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -117,14 +118,31 @@ addBookForm.addEventListener('submit', (e) => {
 // ***********************************************************************
 const deleteBookForm = document.querySelector('.delete')
 deleteBookForm.addEventListener('submit', (e) => {
-  e.preventDefault()
-
-  const docRef = doc(db, 'books', deleteBookForm.id.value)
-
-  deleteDoc(docRef)
+    e.preventDefault()
+    
+    const docRef = doc(db, 'books', deleteBookForm.id.value)
+    
+    deleteDoc(docRef)
     .then(() => {
-      deleteBookForm.reset()
+        deleteBookForm.reset()
     })
     .then(() => console.log("Book deleted"))
     .catch(err => console.log(err))
 })
+
+
+// Get a single document
+// ***********************************************************************
+
+const singleDocRef = doc(db, "books", "3p9SH2duSv1jO0WGlqKr")
+getDoc(singleDocRef)
+    .then(doc=> {
+        console.log("Fetching a single document: ");
+        console.log(doc.data())
+        console.log("id: " + doc.id)
+    })
+
+// Single doc in real time. Cuando hay algún cambio en el doc, ejecuta la callback auto. 
+// onSnapshot(singleDocRef, (doc) => {
+//     console.log(doc.data(), doc.id)
+//     })
