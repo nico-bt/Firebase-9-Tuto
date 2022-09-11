@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -21,27 +21,40 @@ const db = getFirestore();
 // Collection reference
 const collectionRef = collection(db,"books")
 
+
 // Get collection data
 // ***********************************************************************
-getDocs(collectionRef)
-    .then((snapshot) =>{
+// ------------ obs: Bloque prog comentado para usar onSnapshot() en vez de getDocs()-----------
+// getDocs(collectionRef)
+//     .then((snapshot) =>{
+    
+    //         const books = []
+    
+    //         snapshot.docs.map(item => {
+        //             // id in the doc.id
+        //             console.log("id: " + item.id)
+        //             // To get de document hay que usar la funcion data()
+        //             console.log(item.data())
         
+        //             // Para armarse un doc:
+        //             books.push({ ...item.data(), id: item.id})
+        //         })
+        //         console.log("Book array: ");
+        //         console.log(books)
+        //     })
+        //     .catch(err => console.log(err))
+// ------------------------- obs: Bloque prog comentado --------------------------------------
+        
+    // Real time collection. Add an eventlistener, refresh data onChange with the onSnapShot() func from firebase
+    // En vez de getDocs() usamos onSnapShot(ref, ()=>{callback})
+    onSnapshot(collectionRef, (snapshot) =>{
         const books = []
 
         snapshot.docs.map(item => {
-            // id in the doc.id
-            console.log("id: " + item.id)
-            // To get de document hay que usar la funcion data()
-            console.log(item.data())
-
-            // Para armarse un doc:
-            books.push({ ...item.data(), id: item.id})
+            books.push({...item.data(), id: item.id})
         })
-        console.log("Book array: ");
-        console.log(books)
+        console.log(books);
     })
-    .catch(err => console.log(err))
-
 
 // Adding docs
 // ***********************************************************************
