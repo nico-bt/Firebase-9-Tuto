@@ -1,8 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -15,4 +13,30 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
+
+// Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore();
+
+// Collection reference
+const collectionRef = collection(db,"books")
+
+// Get collection data
+getDocs(collectionRef)
+    .then((snapshot) =>{
+        
+        const books = []
+
+        snapshot.docs.map(item => {
+            // id in the doc.id
+            console.log("id: " + item.id)
+            // To get de document hay que usar la funcion data()
+            console.log(item.data())
+
+            // Para armarse un doc:
+            books.push({ ...item.data(), id: item.id})
+        })
+        console.log("Book array: ");
+        console.log(books)
+    })
+    .catch(err => console.log(err))
