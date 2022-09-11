@@ -1,6 +1,10 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import { 
+    getFirestore, collection, getDocs, 
+    addDoc, deleteDoc, 
+    doc, onSnapshot,
+    query, where } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -55,6 +59,23 @@ const collectionRef = collection(db,"books")
         })
         console.log(books);
     })
+
+
+// Queries
+// ***********************************************************************
+
+const q = query(collectionRef,where("autor", "==", "Julio Cortázar"))
+
+onSnapshot(q, (snapshot) => {
+    const books = []
+
+    snapshot.docs.map(item => {
+        books.push({...item.data(), id: item.id})
+    })
+    console.log("Query: autor == Julio Cortázar")
+    console.log(books);
+})
+
 
 // Adding docs
 // ***********************************************************************
