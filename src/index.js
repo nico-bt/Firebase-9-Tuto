@@ -4,7 +4,8 @@ import {
     getFirestore, collection, getDocs, 
     addDoc, deleteDoc, 
     doc, onSnapshot,
-    query, where } from "firebase/firestore";
+    query, where,
+    orderBy, serverTimestamp } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -64,15 +65,31 @@ const collectionRef = collection(db,"books")
 // Queries
 // ***********************************************************************
 
-const q = query(collectionRef,where("autor", "==", "Julio Cortázar"))
+// By autor
+//------------------------------
+const q = query(collectionRef, where("autor", "==", "Julio Cortázar"))
 
 onSnapshot(q, (snapshot) => {
+    const books = []
+    
+    snapshot.docs.map(item => {
+        books.push({...item.data(), id: item.id})
+    })
+    console.log("Query: autor == Julio Cortázar")
+    console.log(books);
+})
+
+// All docs by timeStamp
+//------------------------------
+const qOrderByCreatedAt = query(collectionRef, orderBy("createdAt"))
+
+onSnapshot(qOrderByCreatedAt, (snapshot) => {
     const books = []
 
     snapshot.docs.map(item => {
         books.push({...item.data(), id: item.id})
     })
-    console.log("Query: autor == Julio Cortázar")
+    console.log("Ordered by CreatedAt")
     console.log(books);
 })
 
@@ -86,6 +103,7 @@ addBookForm.addEventListener('submit', (e) => {
   addDoc(collectionRef, {
     titulo: addBookForm.titulo.value,
     autor: addBookForm.autor.value,
+    createdAt: serverTimestamp()
   })
     .then(() => {
         addBookForm.reset()
