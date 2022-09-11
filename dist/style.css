@@ -1,4 +1,4 @@
-.add, .delete {
+.add, .delete, .update {
     max-width: 700px;
     margin: 10px auto;
     display: flex;
@@ -6,7 +6,7 @@
     gap: 10px;
     border: 2px solid gray;
     border-radius: 10px;
-    padding: 20px;
+    padding: 12px;
     background-color: aliceblue;
 }
 label{
@@ -17,7 +17,7 @@ input{
 }
 
 button{
-    margin: 20px auto;
+    margin: 10px auto;
     max-width: 200px;
     padding: 6px 20px;
     border-radius: 6px;
