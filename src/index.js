@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -22,6 +22,7 @@ const db = getFirestore();
 const collectionRef = collection(db,"books")
 
 // Get collection data
+// ***********************************************************************
 getDocs(collectionRef)
     .then((snapshot) =>{
         
@@ -40,3 +41,38 @@ getDocs(collectionRef)
         console.log(books)
     })
     .catch(err => console.log(err))
+
+
+// Adding docs
+// ***********************************************************************
+const addBookForm = document.querySelector('.add')
+addBookForm.addEventListener('submit', (e) => {
+  e.preventDefault()
+
+  addDoc(collectionRef, {
+    titulo: addBookForm.titulo.value,
+    autor: addBookForm.autor.value,
+  })
+    .then(() => {
+        addBookForm.reset()
+    })
+    .then(() => console.log("Book added"))
+    .catch(err => console.log(err))
+})
+
+
+// Deleting docs
+// ***********************************************************************
+const deleteBookForm = document.querySelector('.delete')
+deleteBookForm.addEventListener('submit', (e) => {
+  e.preventDefault()
+
+  const docRef = doc(db, 'books', deleteBookForm.id.value)
+
+  deleteDoc(docRef)
+    .then(() => {
+      deleteBookForm.reset()
+    })
+    .then(() => console.log("Book deleted"))
+    .catch(err => console.log(err))
+})
