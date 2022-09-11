@@ -1,0 +1,32 @@
+.add, .delete {
+    max-width: 700px;
+    margin: 10px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: aliceblue;
+}
+label{
+    margin-top: 12px;
+}
+input{
+    padding: 6px;
+}
+
+button{
+    margin: 20px auto;
+    max-width: 200px;
+    padding: 6px 20px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    font-variant: small-caps;
+}
+button:hover{
+    cursor: pointer;
+    color: white;
+    background-color: black;
+}
