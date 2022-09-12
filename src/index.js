@@ -8,6 +8,9 @@ import {
     orderBy, serverTimestamp,
     getDoc,
     updateDoc } from "firebase/firestore";
+import {
+    getAuth, createUserWithEmailAndPassword
+} from "firebase/auth"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -22,8 +25,13 @@ const firebaseConfig = {
 // Initialize Firebase
 initializeApp(firebaseConfig);
 
+// Init Services (Firestore and Auth)
+//---------------------------------------------------------------------
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore();
+// Init Auth
+const auth = getAuth()
+
 
 // Collection reference
 const collectionRef = collection(db,"books")
@@ -155,17 +163,40 @@ const updateForm = document.querySelector(".update")
 
 updateForm.addEventListener("submit", (e)=>{
     e.preventDefault()
-
+    
     const id = updateForm.id.value
     const newTitle = updateForm.newTitle.value
-
+    
     //Get doc reference
     const docRef = doc(db, "books", id)
-
+    
     //Update in db
     updateDoc(docRef,{ titulo: newTitle })
-        .then(() => {
-            console.log("Doc Updated")
-            updateForm.reset()
-        })
+    .then(() => {
+        console.log("Doc Updated")
+        updateForm.reset()
+    })
+})
+
+
+// Authentication 
+// ***********************************************************************
+
+// signing users up
+//------------------
+const signupForm = document.querySelector('.signup')
+signupForm.addEventListener('submit', (e) => {
+  e.preventDefault()
+
+  const email = signupForm.email.value
+  const password = signupForm.password.value
+
+  createUserWithEmailAndPassword(auth, email, password)
+    .then(userCredential => {
+      console.log('user created:', userCredential.user)
+      signupForm.reset()
+    })
+    .catch(err => {
+      console.log(err.message)
+    })
 })

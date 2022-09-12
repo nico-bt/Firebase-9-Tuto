@@ -1,4 +1,4 @@
-.add, .delete, .update {
+.add, .delete, .update, .signup {
     max-width: 700px;
     margin: 10px auto;
     display: flex;
@@ -8,6 +8,9 @@
     border-radius: 10px;
     padding: 12px;
     background-color: aliceblue;
+}
+h2{
+    border-bottom: 2px solid black;
 }
 label{
     margin-top: 12px;
