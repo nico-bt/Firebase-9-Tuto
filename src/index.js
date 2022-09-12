@@ -10,7 +10,8 @@ import {
     updateDoc } from "firebase/firestore";
 import {
     getAuth, createUserWithEmailAndPassword,
-    signInWithEmailAndPassword, signOut
+    signInWithEmailAndPassword, signOut,
+    onAuthStateChanged
 } from "firebase/auth"
 
 // Your web app's Firebase configuration
@@ -219,17 +220,43 @@ logoutButton.addEventListener('click', () => {
 //----------------------
 const loginForm = document.querySelector('.login')
 loginForm.addEventListener('submit', (e) => {
-  e.preventDefault()
-
-  const email = loginForm.email.value
-  const password = loginForm.password.value
-
-  signInWithEmailAndPassword(auth, email, password)
+    e.preventDefault()
+    
+    const email = loginForm.email.value
+    const password = loginForm.password.value
+    
+    signInWithEmailAndPassword(auth, email, password)
     .then(userCredential => {
-      console.log('user logged in:', userCredential.user)
-      loginForm.reset()
+        console.log('user logged in:', userCredential.user)
+        loginForm.reset()
     })
     .catch(err => {
-      console.log(err.message)
+        console.log(err.message)
     })
 })
+
+// Subscribing to Auth Changes (the onAuth function returns a function to unsuscribe en el futuro)
+//--------------------------------------------------------------------------------------------------
+const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+    // user - Will return the user object or null, depending if is logged in/out
+    console.log("User status changed: ", user);
+    
+    if (user) {
+        // User is signed in, see docs for a list of available properties
+        const uid = user.uid;
+        console.log("onAuthStateChanged => callback")
+        console.log("id: ", uid)
+        console.log("User: ", user.email)
+    } else {
+        console.log("User is signed out");
+    }
+});
+
+// Unsubscribing to Auth Changes
+//---------------------------------
+const unsubButton = document.querySelector('.unsub')
+unsubButton.addEventListener('click', () => {
+  console.log('Unsubscribing from onAuthStateChanged')
+  unsubscribeAuth()
+})
+  
