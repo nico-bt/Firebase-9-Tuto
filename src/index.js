@@ -9,7 +9,8 @@ import {
     getDoc,
     updateDoc } from "firebase/firestore";
 import {
-    getAuth, createUserWithEmailAndPassword
+    getAuth, createUserWithEmailAndPassword,
+    signInWithEmailAndPassword, signOut
 } from "firebase/auth"
 
 // Your web app's Firebase configuration
@@ -186,15 +187,47 @@ updateForm.addEventListener("submit", (e)=>{
 //------------------
 const signupForm = document.querySelector('.signup')
 signupForm.addEventListener('submit', (e) => {
-  e.preventDefault()
-
+    e.preventDefault()
+    
   const email = signupForm.email.value
   const password = signupForm.password.value
-
+  
   createUserWithEmailAndPassword(auth, email, password)
-    .then(userCredential => {
+  .then(userCredential => {
       console.log('user created:', userCredential.user)
       signupForm.reset()
+    })
+    .catch(err => {
+        console.log(err.message)
+    })
+})
+
+// Log out
+//----------------------
+const logoutButton = document.querySelector('.logout')
+logoutButton.addEventListener('click', () => {
+    signOut(auth)
+    .then(() => {
+        console.log('user signed out')
+    })
+    .catch(err => {
+        console.log(err.message)
+    })
+})
+
+// Log in
+//----------------------
+const loginForm = document.querySelector('.login')
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault()
+
+  const email = loginForm.email.value
+  const password = loginForm.password.value
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then(userCredential => {
+      console.log('user logged in:', userCredential.user)
+      loginForm.reset()
     })
     .catch(err => {
       console.log(err.message)

@@ -1,4 +1,4 @@
-.add, .delete, .update, .signup {
+.add, .delete, .update, .signup, .login, .logout {
     max-width: 700px;
     margin: 10px auto;
     display: flex;
